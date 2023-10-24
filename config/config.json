@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "kuk-header-webpart-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/kukHeaderWebpart/KukHeaderWebpartWebPart.js",
+          "manifest": "./src/webparts/kukHeaderWebpart/KukHeaderWebpartWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "KukHeaderWebpartWebPartStrings": "lib/webparts/kukHeaderWebpart/loc/{locale}.js"
+  }
+}

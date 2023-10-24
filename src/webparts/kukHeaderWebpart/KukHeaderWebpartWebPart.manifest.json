@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "14fbf7d8-eda2-429e-b51d-661331809a9e",
+  "alias": "KukHeaderWebpartWebPart",
+  "componentType": "WebPart",
+
+ 
+  "version": "*",
+  "manifestVersion": 2,
+
+ 
+  "requiresCustomScript": false,
+   "supportsFullBleed": true,
+
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70", 
+    "group": { "default": "Other" },
+    "title": { "default": "KUKHeaderWebpart" },
+    "description": { "default": "Header Picture" },
+    "officeFabricIconFontName": "Page",
+    "properties": {
+      "description": "KUKHeaderWebpart"
+    }
+  }]
+}
