@@ -14,13 +14,16 @@ import * as strings from 'KukHeaderWebpartWebPartStrings';
 export interface IKukHeaderWebpartWebPartProps {
   description: string;
   height: number; 
+  header1: string,
+  header2: string,
+  imageURL: string
 }
 
 export default class KukHeaderWebpartWebPart extends BaseClientSideWebPart<IKukHeaderWebpartWebPartProps> {
 
   public render(): void {
 
-    this.createHeaderPicture();
+    this.createHeaderPicture2();
     /* this.domElement.innerHTML = `
        <div class="${styles.kukHeaderWebpart}">
          <div class="${styles.container}">
@@ -42,7 +45,25 @@ export default class KukHeaderWebpartWebPart extends BaseClientSideWebPart<IKukH
      return Version.parse('1.0');
    }
  */
-  private async createHeaderPicture(): Promise<string> {
+   private async createHeaderPicture2(): Promise<string> {
+    try {
+        /*this.domElement.innerHTML = `
+        <div class = "${styles.headerImageContainer}" style = "height:${this.properties.height}px"><img src = "${this.properties.imageURL}" class = "${styles.headerImage}"></img> </div>`;
+        */
+        this.domElement.innerHTML = `
+        <div class="${styles.imageOverlayContainer}" style="height:${this.properties.height}px">
+          <img src="${this.properties.imageURL}" class="${styles.backgroundImage}" />
+          <div class="${styles.textOverlay}">
+            <h1 class="${styles.headerText}">${this.properties.header1}</h1>
+            <h2 class="${styles.headerText}">${this.properties.header2}</h2>
+          </div>
+        </div>`;
+        return this.properties.imageURL;
+    } catch (error) {
+      throw error;
+    }
+  }
+  /*private async createHeaderPicture(): Promise<string> {
     try {
       const requestUrl = `${this.context.pageContext.web.absoluteUrl}/_api/web/lists/getByTitle('Site Assets')/items?$filter=FileLeafRef eq 'HeaderPicture.jpg'&$select=FileRef`;
       const response = await this.context.spHttpClient.get(requestUrl, SPHttpClient.configurations.v1);
@@ -60,25 +81,38 @@ export default class KukHeaderWebpartWebPart extends BaseClientSideWebPart<IKukH
     } catch (error) {
       throw error;
     }
-  }
+  }*/
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {
-          header: {
+         /* header: {
             description: strings.PropertyPaneDescription
-          },
+          },*/
           groups: [
             {
-              groupName: strings.BasicGroupName,
+              //groupName: strings.BasicGroupName,
+              groupName: 'Einstellungen',
               groupFields: [
               /*  PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
                 }),*/
+                PropertyPaneTextField('header1', { // 'heading1' is the internal property name.
+                  label: "Überschrift 1", // This is the label that will be displayed in the properties pane.
+                  value: this.properties.header1
+                }),
+                PropertyPaneTextField('header2', { // 'heading2' is the internal property name.
+                  label: "Überschrift 2", // This is the label that will be displayed in the properties pane.
+                  value: this.properties.header2
+                }),
+                PropertyPaneTextField('imageURL', {
+                  label: "Hintergrundfoto URL", // This label will appear in the property pane
+                  value: this.properties.imageURL
+                }),
                 PropertyPaneSlider('height', {
                   label: "Height",
                   min: 0,
-                  max: 1000,
+                  max: 700,
                   step: 1,
                   value: this.properties.height
                 }),
