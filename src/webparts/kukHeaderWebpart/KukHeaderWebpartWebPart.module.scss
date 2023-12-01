@@ -1,5 +1,10 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
+//Hide default Header
+[class^="pageHeader"] {
+  display: none;
+}
+
 .imageOverlayContainer {
   position: relative;
   width: 100%;
@@ -16,24 +21,24 @@
   top: 50%;
   left: 50px; 
   transform: translateY(-50%); 
-  //color: #FF0000; // Strong red color for the text
+  color: RGBA(230,0,0,1); // Strong red color for the text
   text-align: left; 
   line-height: 1.4; 
-  font-weight: bold; 
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); 
   width: 60%;
 }
 
 .headerText {
   margin: 0;
+  font-weight: lighter;
 }
 
-.headerText:first-child {
-  font-size: 1.4em; // Adjust size for Header 1 based on preference
-}
+/*.headerText:first-child {
+  font-size: 1.6em; // Adjust size for Header 1 based on preference
+}*/
 
 .headerText:last-child {
-  font-size: 1.8em; // Adjust size for Header 2 based on preference
+  //font-size: 2.2em; // Adjust size for Header 2 based on preference
   text-decoration: underline; // Underlining the second header
 }
 
