@@ -21,7 +21,13 @@ export interface IKukHeaderWebpartWebPartProps {
   fontSize1: number;
 }
 
+export interface IKukHeaderWebpartWebPartState {
+  isCollapsed: boolean;
+}
+
+
 export default class KukHeaderWebpartWebPart extends BaseClientSideWebPart<IKukHeaderWebpartWebPartProps> {
+  private isCollapsed: boolean = false;
   protected onInit(): Promise<void> {
     if (this.properties.header1 === undefined) {
       this.properties.header1 = 'Überschrift 1';
@@ -44,83 +50,58 @@ export default class KukHeaderWebpartWebPart extends BaseClientSideWebPart<IKukH
   public render(): void {
 
     this.createHeaderPicture2();
-    /* this.domElement.innerHTML = `
-       <div class="${styles.kukHeaderWebpart}">
-         <div class="${styles.container}">
-           <div class="${styles.row}">
-             <div class="${styles.column}">
-               <span class="${styles.title}">Welcome to SharePoint!</span>
-               <p class="${styles.subTitle}">Customize SharePoint experiences using Web Parts.</p>
-               <p class="${styles.description}">${escape(this.properties.description)}</p>
-               <a href="https://aka.ms/spfx" class="${styles.button}">
-                 <span class="${styles.label}">Learn more</span>
-               </a>
-             </div>
-           </div>
-         </div>
-       </div>`;*/
   }
 
-  /* protected get dataVersion(): Version {
-     return Version.parse('1.0');
-   }
- */
+  private collapseHeader(): void {
+    this.isCollapsed = !this.isCollapsed;
+    this.render();
+  }
   private async createHeaderPicture2(): Promise<string> {
     try {
-      /*this.domElement.innerHTML = `
-      <div class = "${styles.headerImageContainer}" style = "height:${this.properties.height}px"><img src = "${this.properties.imageURL}" class = "${styles.headerImage}"></img> </div>`;
-      */
-
       if (this.properties.imageURL != "") {
         console.log("!imageurl");
         console.log(typeof (this.properties.imageURL));
-
-        this.domElement.innerHTML = `
+        if (this.isCollapsed == false) {
+          this.domElement.innerHTML = `
         <div class="${styles.imageOverlayContainer}" style="height:${this.properties.height}px">
           <img src="${this.properties.imageURL}" class="${styles.backgroundImage}" />
           <div class="${styles.textOverlay}">
             <h1 class="${styles.headerText}" style="font-size:${this.properties.fontSize1}px">${this.properties.header1}</h1>
             <h2 class="${styles.headerText}" style="font-size:${this.properties.fontSize}px">${this.properties.header2}</h2>
           </div>
-        </div>`;
+        </div>
+        <button id="chevronButton" class="${styles.chevronButton}"></button>`;
+        } else {
+          this.domElement.innerHTML = ` <button id="chevronButton" class="${styles.chevronButton}"></button>`;
+        }
       }
       else {
         const imgURL = require('./defaultImage.jpg');
         console.log(imgURL);
-        this.domElement.innerHTML = `
+        if (this.isCollapsed == false) {
+          this.domElement.innerHTML = `
         <div class="${styles.imageOverlayContainer}" style="height:${this.properties.height}px">
           <img src="${imgURL}" class="${styles.backgroundImage}" />
           <div class="${styles.textOverlay}">
           <h1 class="${styles.headerText}" style="font-size:${this.properties.fontSize1}px">${this.properties.header1}</h1>
           <h2 class="${styles.headerText}" style="font-size:${this.properties.fontSize}px">${this.properties.header2}</h2>
           </div>
-        </div>`;
+        </div>
+        <button id="chevronButton" class="${styles.chevronButton}"></button>`;
+        }
+        else {
+          this.domElement.innerHTML = ` <button id="chevronButton" class="${styles.chevronButton}"></button>`;
+        }
+      }
+      const chevronButton = this.domElement.querySelector('#chevronButton');
+      if (chevronButton) {
+        chevronButton.addEventListener('click', () => this.collapseHeader());
       }
       return this.properties.imageURL;
     } catch (error) {
       throw error;
     }
   }
-  /*private async createHeaderPicture(): Promise<string> {
-    try {
-      const requestUrl = `${this.context.pageContext.web.absoluteUrl}/_api/web/lists/getByTitle('Site Assets')/items?$filter=FileLeafRef eq 'HeaderPicture.jpg'&$select=FileRef`;
-      const response = await this.context.spHttpClient.get(requestUrl, SPHttpClient.configurations.v1);
-      const items = await response.json();
-
-      if (items.value && items.value.length > 0) {
-        //alert(items.value[0].FileRef);
-        this.domElement.innerHTML = `
-        <div class = "${styles.headerImageContainer}" style = "height:${this.properties.height}px"><img src = "${items.value[0].FileRef}" class = "${styles.headerImage}"></img> </div>`;
-        return items.value[0].FileRef;
-
-      } else {
-        throw new Error('No picture found');
-      }
-    } catch (error) {
-      throw error;
-    }
-  }*/
-
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
@@ -134,9 +115,6 @@ export default class KukHeaderWebpartWebPart extends BaseClientSideWebPart<IKukH
               //groupName: strings.BasicGroupName,
               groupName: 'Einstellungen',
               groupFields: [
-                /*  PropertyPaneTextField('description', {
-                    label: strings.DescriptionFieldLabel
-                  }),*/
                 PropertyPaneTextField('header1', { // 'heading1' is the internal property name.
                   label: "Überschrift 1", // This is the label that will be displayed in the properties pane.
                   value: this.properties.header1
@@ -170,7 +148,7 @@ export default class KukHeaderWebpartWebPart extends BaseClientSideWebPart<IKukH
                   step: 1,
                   value: this.properties.height
                 }),
-                
+
 
               ]
             }
